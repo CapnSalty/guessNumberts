@@ -1,10 +1,8 @@
-function randomNumberGuessingGame(): void{
+function randomNumberGuessingGame(): void {
     const targetNumber: number = Math.floor(Math.random() * 100) + 1; //Generates random number up to 100, the "+ 1" raises lowest value range to 1.
     let attempts: number = 0;
-    let guess: number | null = null; //Allows guess to hold number, but null allows it to be uninitialized until input is made for variable"
-    const maxAttempts = 10
-    let replay:boolean = true;
-    let response: string;
+    let guessCorrectly = false;
+    const maxAttempts = 5
 
     console.log("Welcome to GUESS THAT NUMBER!");
     
@@ -20,33 +18,36 @@ function randomNumberGuessingGame(): void{
     console.log("You only have", + maxAttempts, "attempts to get it correctly.");
     
 
-    while(guess !== targetNumber){
-        guess = parseInt(prompt("What is your guess?") || " ");
+    while(!guessCorrectly && attempts < maxAttempts){
+        const guessInput = parseInt(prompt("What is your guess?") || " ");
         attempts++;
         
-        if(isNaN(guess)){
+        if(isNaN(guessInput) || guessInput < 1 || guessInput > 100) {
            console.log("Invalid input. Please enter a number");
-        } else if (guess < targetNumber){
+           continue;
+        }
+
+        if (guessInput < targetNumber){
             console.log("Too low!");
-        } else if (guess > targetNumber){
+        } else if (guessInput > targetNumber){
             console.log("Too high!");
         } else {
             console.log("Congratulations! You guessed the number in", + attempts, "attempts.");
+            guessCorrectly = true;
         }
     }   
-    if (attempts == maxAttempts){
+    if (attempts == maxAttempts && !guessCorrectly){
         console.log("Unfortunately, you're out of attempts.");
         console.log("The correct number was ", + targetNumber ,".");
-        
-        const response = prompt("Would you like to play again? Please enter [y/n].");
-
-        if(response == "y"){
-            let replay = true;
-        } else {
-            let replay = false;
-        }
-        
-        console.log("Thanks for playing! See you next time!");
     }
-}
-randomNumberGuessingGame();
+        
+    const playAgainInput = prompt("Would you like to play again? Please enter [y/n].");
+    if(playAgainInput === "yes" || playAgainInput === "y") {
+        randomNumberGuessingGame();
+    } else {
+            console.log("Thanks for playing! See you next time!");   
+        }
+    }
+
+
+ randomNumberGuessingGame();
